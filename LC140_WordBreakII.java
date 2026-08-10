@@ -1,55 +1,29 @@
-import java.util.*;
-
 class Solution {
+    static final int MOD = 1337;
 
-    public List<String> wordBreak(String s, List<String> wordDict) {
-        Set<String> dict = new HashSet<>(wordDict);
-        Map<Integer, List<String>> memo = new HashMap<>();
+    public int superPow(int a, int[] b) {
+        long result = 1;
 
-        return solve(s, 0, dict, memo);
+        for (int i = b.length - 1; i >= 0; i--) {
+            result = (result * power(a, b[i])) % MOD;
+            a = power(a, 10);
+        }
+
+        return (int) result;
     }
 
-    private List<String> solve(String s, int start,
-                               Set<String> dict,
-                               Map<Integer, List<String>> memo) {
+    private int power(long a, int n) {
+        long result = 1;
 
-        // Already calculated
-        if (memo.containsKey(start)) {
-            return memo.get(start);
-        }
-
-        List<String> result = new ArrayList<>();
-
-        // Reached the end
-        if (start == s.length()) {
-            result.add("");
-            return result;
-        }
-
-        // Try every possible word starting from 'start'
-        for (int end = start + 1; end <= s.length(); end++) {
-
-            String word = s.substring(start, end);
-
-            if (!dict.contains(word)) {
-                continue;
+        while (n > 0) {
+            if ((n & 1) == 1) {
+                result = (result * a) % MOD;
             }
 
-            // Solve the remaining string
-            List<String> remaining = solve(s, end, dict, memo);
-
-            for (String sentence : remaining) {
-
-                if (sentence.isEmpty()) {
-                    result.add(word);
-                } else {
-                    result.add(word + " " + sentence);
-                }
-            }
+            a = (a * a) % MOD;
+            n >>= 1;
         }
 
-        memo.put(start, result);
-
-        return result;
+        return (int) result;
     }
 }
