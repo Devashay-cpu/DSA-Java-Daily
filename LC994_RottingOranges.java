@@ -62,4 +62,4 @@ class LC994_RottingOranges {
 
         return fresh == 0 ? minutes : -1;
     }
-}
+}5
